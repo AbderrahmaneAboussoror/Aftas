@@ -69,4 +69,16 @@ public class FishController {
                         .build()
         );
     }
+    @DeleteMapping("/{name}")
+    public ResponseEntity<Response> delete(@PathVariable String name) throws NotFoundException {
+        return ResponseEntity.ok(
+                Response.builder()
+                        .timeStamp(now())
+                        .data(of("deleted", fishService.delete(name)))
+                        .message("Fish deleted")
+                        .status(OK)
+                        .statusCode(OK.value())
+                        .build()
+        );
+    }
 }
