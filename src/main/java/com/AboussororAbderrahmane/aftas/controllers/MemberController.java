@@ -1,7 +1,8 @@
 package com.AboussororAbderrahmane.aftas.controllers;
 
 import com.AboussororAbderrahmane.aftas.dtos.Response;
-import com.AboussororAbderrahmane.aftas.dtos.competition.RequestCompetitionDTO;
+import com.AboussororAbderrahmane.aftas.dtos.member.RequestMemberDTO;
+import com.AboussororAbderrahmane.aftas.exceptions.InvalidDataException;
 import com.AboussororAbderrahmane.aftas.exceptions.NotFoundException;
 import com.AboussororAbderrahmane.aftas.services.implementations.MemberService;
 import jakarta.validation.Valid;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import static java.time.LocalDateTime.now;
 import static java.util.Map.of;
+import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
 
 @RestController
@@ -57,9 +59,14 @@ public class MemberController {
         );
     }
     @PostMapping
-    public ResponseEntity<Response> create(@Valid @RequestBody RequestCompetitionDTO member) {
+    public ResponseEntity<Response> create(@Valid @RequestBody RequestMemberDTO member) throws InvalidDataException {
         return ResponseEntity.ok(
                 Response.builder()
+                        .timeStamp(now())
+                        .data(of("member", memberService.save(member)))
+                        .message("Member created")
+                        .status(CREATED)
+                        .statusCode(CREATED.value())
                         .build()
         );
     }

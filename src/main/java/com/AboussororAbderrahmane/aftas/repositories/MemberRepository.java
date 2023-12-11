@@ -10,5 +10,6 @@ import java.util.Optional;
 @Repository
 public interface MemberRepository extends JpaRepository<Member, Integer> {
     Optional<Member> findMemberByNum(Integer integer);
-    List<Member> findAllByNameOrFamilyName(String s);
+    List<Member> findAllByName(String s);
+    List<Member> findAllByFamilyName(String s);
 }

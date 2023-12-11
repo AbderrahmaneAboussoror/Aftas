@@ -84,6 +84,10 @@ public class FishService implements IFishService {
 
     @Override
     public boolean delete(String s) throws NotFoundException {
-        return false;
+        log.info("Checking if the fish exists");
+        Fish fish = fishRepository.findFishByName(s)
+                .orElseThrow(() -> new NotFoundException("Fish not found"));
+        fishRepository.delete(fish);
+        return true;
     }
 }

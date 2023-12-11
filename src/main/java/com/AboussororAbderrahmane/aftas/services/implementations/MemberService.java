@@ -3,6 +3,7 @@ package com.AboussororAbderrahmane.aftas.services.implementations;
 import com.AboussororAbderrahmane.aftas.dtos.member.MemberDTO;
 import com.AboussororAbderrahmane.aftas.dtos.member.RequestMemberDTO;
 import com.AboussororAbderrahmane.aftas.entities.Member;
+import com.AboussororAbderrahmane.aftas.enums.IdentityDocumentType;
 import com.AboussororAbderrahmane.aftas.exceptions.InvalidDataException;
 import com.AboussororAbderrahmane.aftas.exceptions.NotFoundException;
 import com.AboussororAbderrahmane.aftas.repositories.MemberRepository;
@@ -40,15 +41,23 @@ public class MemberService implements IMemberService {
     @Override
     public List<MemberDTO> find(String s) throws NotFoundException {
         log.info("Retrieving member(s) by name or family name");
-        List<Member> memberList = memberRepository.findAllByNameOrFamilyName(s);
-        if (memberList.isEmpty())
-            throw new NotFoundException("No members found by that name / family name");
+        List<Member> memberList = memberRepository.findAllByName(s);
+        if (memberList.isEmpty()) {
+            memberList = memberRepository.findAllByFamilyName(s);
+            if (memberList.isEmpty())
+                throw new NotFoundException("no members found with that value");
+        }
         return List.of(modelMapper.map(memberList, MemberDTO[].class));
     }
 
     @Override
     public MemberDTO save(RequestMemberDTO bean) throws InvalidDataException {
-        return null;
+        Member member = modelMapper.map(bean, Member.class);
+        member.setIdentityDocument(IdentityDocumentType.valueOf(
+                bean.getIdentityDocument().name()
+        ));
+        log.info("Saving new member {}", member.getName());
+        return modelMapper.map(memberRepository.save(member), MemberDTO.class);
     }
 
     @Override

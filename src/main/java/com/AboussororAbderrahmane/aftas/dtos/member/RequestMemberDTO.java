@@ -26,8 +26,6 @@ public class RequestMemberDTO {
     @NotNull(message = "The nationality field cannot be null!")
     @NotEmpty(message = "The nationality field cannot be empty!")
     private String nationality;
-    @NotNull(message = "The identity document field cannot be null!")
-    @NotEmpty(message = "The identity document field cannot be empty!")
     private IdentityDocumentType identityDocument;
     @NotNull(message = "The identity number field cannot be null!")
     @NotEmpty(message = "The identity number field cannot be empty!")
