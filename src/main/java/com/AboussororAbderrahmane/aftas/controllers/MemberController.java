@@ -1,8 +1,10 @@
 package com.AboussororAbderrahmane.aftas.controllers;
 
 import com.AboussororAbderrahmane.aftas.dtos.Response;
+import com.AboussororAbderrahmane.aftas.dtos.competition.RequestCompetitionDTO;
 import com.AboussororAbderrahmane.aftas.exceptions.NotFoundException;
 import com.AboussororAbderrahmane.aftas.services.implementations.MemberService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -39,6 +41,25 @@ public class MemberController {
                         .message("Member retrieved")
                         .status(OK)
                         .statusCode(OK.value())
+                        .build()
+        );
+    }
+    @GetMapping("/search/{name}")
+    public ResponseEntity<Response> search(@PathVariable String name) throws NotFoundException {
+        return ResponseEntity.ok(
+                Response.builder()
+                        .timeStamp(now())
+                        .data(of("member(s)", memberService.find(name)))
+                        .message("Member(s) retrieved")
+                        .status(OK)
+                        .statusCode(OK.value())
+                        .build()
+        );
+    }
+    @PostMapping
+    public ResponseEntity<Response> create(@Valid @RequestBody RequestCompetitionDTO member) {
+        return ResponseEntity.ok(
+                Response.builder()
                         .build()
         );
     }

@@ -38,6 +38,15 @@ public class MemberService implements IMemberService {
     }
 
     @Override
+    public List<MemberDTO> find(String s) throws NotFoundException {
+        log.info("Retrieving member(s) by name or family name");
+        List<Member> memberList = memberRepository.findAllByNameOrFamilyName(s);
+        if (memberList.isEmpty())
+            throw new NotFoundException("No members found by that name / family name");
+        return List.of(modelMapper.map(memberList, MemberDTO[].class));
+    }
+
+    @Override
     public MemberDTO save(RequestMemberDTO bean) throws InvalidDataException {
         return null;
     }
