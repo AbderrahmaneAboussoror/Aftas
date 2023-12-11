@@ -9,6 +9,6 @@ import java.util.Optional;
 
 @Repository
 public interface LevelRepository extends JpaRepository<Level, Integer> {
-    @Query("SELECT l FROM Level l ORDER BY l.code DESC")
+    @Query("SELECT l FROM Level l ORDER BY l.code DESC LIMIT 1")
     Optional<Level> findLevelByIdDesc();
 }

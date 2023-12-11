@@ -65,7 +65,7 @@ public class LevelService implements ILevelService {
 
         if (lastInsertedLevelOptional.isPresent()) {
             Level lastInsertedLevel = lastInsertedLevelOptional.get();
-            if (lastInsertedLevel.getPoints() >= bean.getPoints())
+            if (lastInsertedLevel.getPoints() > bean.getPoints())
                 throw new InvalidDataException("The points of the level you are trying to update should be higher");
         }
 
