@@ -2,6 +2,7 @@ package com.AboussororAbderrahmane.aftas.controllers;
 
 import com.AboussororAbderrahmane.aftas.dtos.Response;
 import com.AboussororAbderrahmane.aftas.dtos.fish.RequestFishDTO;
+import com.AboussororAbderrahmane.aftas.exceptions.InvalidDataException;
 import com.AboussororAbderrahmane.aftas.exceptions.NotFoundException;
 import com.AboussororAbderrahmane.aftas.services.implementations.FishService;
 import jakarta.validation.Valid;
@@ -53,6 +54,18 @@ public class FishController {
                         .message("Fish created")
                         .status(CREATED)
                         .statusCode(CREATED.value())
+                        .build()
+        );
+    }
+    @PutMapping("/{name}")
+    public ResponseEntity<Response> update(@Valid @RequestBody RequestFishDTO fish, @PathVariable String name) throws NotFoundException, InvalidDataException {
+        return ResponseEntity.ok(
+                Response.builder()
+                        .timeStamp(now())
+                        .data(of("fish", fishService.update(name, fish)))
+                        .message("Fish updated")
+                        .status(OK)
+                        .statusCode(OK.value())
                         .build()
         );
     }

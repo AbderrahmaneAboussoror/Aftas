@@ -63,7 +63,23 @@ public class FishService implements IFishService {
 
     @Override
     public FishDTO update(String s, RequestFishDTO bean) throws NotFoundException, InvalidDataException {
-        return null;
+        log.info("Checking if the fish exists");
+        Fish fish = fishRepository.findFishByName(bean.getName())
+                .orElseThrow(() -> new NotFoundException("Fish not found"));
+        fish.setAverageWeight(
+                bean.getAverageWeight()
+        );
+
+        log.info("Checking if the level exists");
+        Optional<Level> levelOptional = levelRepository.findById(bean.getLevel_code());
+        fish.setLevel(
+                levelOptional.orElseThrow(
+                        () -> new NotFoundException("Level not found")
+                )
+        );
+
+        log.info("Updating fish {}", fish.getName());
+        return modelMapper.map(fishRepository.save(fish), FishDTO.class);
     }
 
     @Override
