@@ -31,7 +31,10 @@ public class MemberService implements IMemberService {
 
     @Override
     public MemberDTO findById(Integer integer) throws NotFoundException {
-        return null;
+        log.info("Retrieving a member by number");
+        Member member = memberRepository.findMemberByNum(integer)
+                .orElseThrow(() -> new NotFoundException("Member not found"));
+        return modelMapper.map(member, MemberDTO.class);
     }
 
     @Override
