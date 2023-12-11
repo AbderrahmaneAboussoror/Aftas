@@ -15,7 +15,7 @@ public class RequestFishDTO {
     @NotNull(message = "The fish name cannot be null!")
     @NotEmpty(message = "The fish name cannot be empty!")
     private String name;
-    @Min(value = 500, message = "The average weight cannot be less than 500g")
+    @Min(value = 0, message = "The average weight cannot be negative")
     private double averageWeight;
     private int level_code;
 }

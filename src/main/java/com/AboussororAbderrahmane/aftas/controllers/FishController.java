@@ -1,14 +1,17 @@
 package com.AboussororAbderrahmane.aftas.controllers;
 
 import com.AboussororAbderrahmane.aftas.dtos.Response;
+import com.AboussororAbderrahmane.aftas.dtos.fish.RequestFishDTO;
 import com.AboussororAbderrahmane.aftas.exceptions.NotFoundException;
 import com.AboussororAbderrahmane.aftas.services.implementations.FishService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import static java.time.LocalDateTime.now;
 import static java.util.Map.of;
+import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
 
 @RequiredArgsConstructor
@@ -23,9 +26,9 @@ public class FishController {
                 Response.builder()
                         .timeStamp(now())
                         .data(of("fishes", fishService.findAll()))
+                        .message("Fishes retrieved")
                         .status(OK)
                         .statusCode(OK.value())
-                        .message("Fishes retrieved")
                         .build()
         );
     }
@@ -35,9 +38,21 @@ public class FishController {
                 Response.builder()
                         .timeStamp(now())
                         .data(of("fish", fishService.findById(name)))
+                        .message("Fish retrieved")
                         .status(OK)
                         .statusCode(OK.value())
-                        .message("Fish retrieved")
+                        .build()
+        );
+    }
+    @PostMapping
+    public ResponseEntity<Response> create(@Valid @RequestBody RequestFishDTO fish) {
+        return ResponseEntity.ok(
+                Response.builder()
+                        .timeStamp(now())
+                        .data(of("fish", fishService.save(fish)))
+                        .message("Fish created")
+                        .status(CREATED)
+                        .statusCode(CREATED.value())
                         .build()
         );
     }
