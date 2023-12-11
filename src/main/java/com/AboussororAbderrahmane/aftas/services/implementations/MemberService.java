@@ -62,7 +62,21 @@ public class MemberService implements IMemberService {
 
     @Override
     public MemberDTO update(Integer integer, RequestMemberDTO bean) throws NotFoundException, InvalidDataException {
-        return null;
+        log.info("Checking if the member exists");
+        Member member = memberRepository.findMemberByNum(integer)
+                .orElseThrow(() -> new NotFoundException("Member not found"));
+
+        member.setName(bean.getName());
+        member.setFamilyName(bean.getFamilyName());
+        member.setNationality(bean.getNationality());
+        member.setIdentityNumber(bean.getIdentityNumber());
+        member.setAccessionDate(bean.getAccessionDate());
+        member.setIdentityDocument(IdentityDocumentType.valueOf(
+                bean.getIdentityDocument().name()
+        ));
+
+        log.info("Updating member {}", member.getName());
+        return modelMapper.map(memberRepository.save(member), MemberDTO.class);
     }
 
     @Override

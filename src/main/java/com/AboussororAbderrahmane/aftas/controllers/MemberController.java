@@ -70,4 +70,16 @@ public class MemberController {
                         .build()
         );
     }
+    @PutMapping("/{num}")
+    public ResponseEntity<Response> update(@Valid @RequestBody RequestMemberDTO member, @PathVariable int num) throws NotFoundException {
+        return ResponseEntity.ok(
+                Response.builder()
+                        .timeStamp(now())
+                        .data(of("member", memberService.update(num, member)))
+                        .message("Member updated")
+                        .status(OK)
+                        .statusCode(OK.value())
+                        .build()
+        );
+    }
 }
