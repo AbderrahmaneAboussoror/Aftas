@@ -23,7 +23,7 @@ public class Level {
     )
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
-            generator = "level_quiz_id_sequence"
+            generator = "level_id_sequence"
     )
     private int code;
     @Column(nullable = false)

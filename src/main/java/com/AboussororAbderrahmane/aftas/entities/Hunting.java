@@ -20,7 +20,7 @@ public class Hunting {
     )
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
-            generator = "hunting_quiz_id_sequence"
+            generator = "hunting_id_sequence"
     )
     private int id;
     @Column(nullable = false)

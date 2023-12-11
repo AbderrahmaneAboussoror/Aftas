@@ -1,8 +1,11 @@
 package com.AboussororAbderrahmane.aftas.controllers;
 
+import com.AboussororAbderrahmane.aftas.dtos.LevelDTO;
 import com.AboussororAbderrahmane.aftas.dtos.Response;
+import com.AboussororAbderrahmane.aftas.exceptions.InvalidDataException;
 import com.AboussororAbderrahmane.aftas.exceptions.NotFoundException;
 import com.AboussororAbderrahmane.aftas.services.implementations.LevelService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -38,6 +41,18 @@ public class LevelController {
                 Response.builder()
                         .timeStamp(now())
                         .data(of("level", levelService.findById(id)))
+                        .message("Level retrieved")
+                        .status(OK)
+                        .statusCode(OK.value())
+                        .build()
+        );
+    }
+    @PostMapping
+    public ResponseEntity<Response> create(@Valid @RequestBody LevelDTO level) throws InvalidDataException {
+        return ResponseEntity.ok(
+                Response.builder()
+                        .timeStamp(now())
+                        .data(of("level", levelService.save(level)))
                         .message("Level retrieved")
                         .status(OK)
                         .statusCode(OK.value())
