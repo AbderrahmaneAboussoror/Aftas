@@ -1,13 +1,11 @@
 package com.AboussororAbderrahmane.aftas.controllers;
 
 import com.AboussororAbderrahmane.aftas.dtos.Response;
+import com.AboussororAbderrahmane.aftas.exceptions.NotFoundException;
 import com.AboussororAbderrahmane.aftas.services.implementations.FishService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import static java.time.LocalDateTime.now;
 import static java.util.Map.of;
@@ -28,6 +26,18 @@ public class FishController {
                         .status(OK)
                         .statusCode(OK.value())
                         .message("Fishes retrieved")
+                        .build()
+        );
+    }
+    @GetMapping("/{name}")
+    public ResponseEntity<Response> get(@PathVariable String name) throws NotFoundException {
+        return ResponseEntity.ok(
+                Response.builder()
+                        .timeStamp(now())
+                        .data(of("fish", fishService.findById(name)))
+                        .status(OK)
+                        .statusCode(OK.value())
+                        .message("Fish retrieved")
                         .build()
         );
     }

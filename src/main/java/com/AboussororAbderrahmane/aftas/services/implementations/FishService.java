@@ -31,7 +31,10 @@ public class FishService implements IFishService {
 
     @Override
     public FishDTO findById(String s) throws NotFoundException {
-        return null;
+        log.info("Retrieving one fish");
+        Fish fish = fishRepository.findFishByName(s)
+                .orElseThrow(() -> new NotFoundException("Fish not found"));
+        return modelMapper.map(fish, FishDTO.class);
     }
 
     @Override
