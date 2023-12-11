@@ -41,24 +41,47 @@ public class LevelService implements ILevelService {
     public LevelDTO save(LevelDTO bean) throws InvalidDataException {
         log.info("Saving new level {}", bean.getDescription());
         Level level = modelMapper.map(bean, Level.class);
+
         log.info("Checking if the new level's points are higher than the last inserted level");
         Optional<Level> lastInsertedLevelOptional = levelRepository.findLevelByIdDesc();
+
         if (lastInsertedLevelOptional.isPresent()) {
             Level lastInsertedLevel = lastInsertedLevelOptional.get();
             if (lastInsertedLevel.getPoints() >= level.getPoints())
                 throw new InvalidDataException("The points of the level you are trying to insert should be higher");
-
         }
+
         return modelMapper.map(levelRepository.save(level), LevelDTO.class);
     }
 
     @Override
     public LevelDTO update(Integer integer, LevelDTO bean) throws NotFoundException, InvalidDataException {
-        return null;
+        log.info("Checking if the level exists in the database");
+        Level level = levelRepository.findById(integer)
+                .orElseThrow(() -> new NotFoundException("Level not found"));
+
+        log.info("Checking if the level's points are higher than the last inserted level");
+        Optional<Level> lastInsertedLevelOptional = levelRepository.findLevelByIdDesc();
+
+        if (lastInsertedLevelOptional.isPresent()) {
+            Level lastInsertedLevel = lastInsertedLevelOptional.get();
+            if (lastInsertedLevel.getPoints() >= bean.getPoints())
+                throw new InvalidDataException("The points of the level you are trying to update should be higher");
+        }
+
+        level.setDescription(bean.getDescription());
+        level.setPoints(bean.getPoints());
+
+        log.info("Updating level {}", level.getDescription());
+        return modelMapper.map(levelRepository.save(level), LevelDTO.class);
     }
 
     @Override
     public boolean delete(Integer integer) throws NotFoundException {
-        return false;
+        log.info("Checking if the level exists in the database");
+        Level level = levelRepository.findById(integer)
+                .orElseThrow(() -> new NotFoundException("Level not found"));
+        levelRepository.delete(level);
+        return true;
     }
 }
