@@ -2,6 +2,7 @@ package com.AboussororAbderrahmane.aftas.services.implementations;
 
 import com.AboussororAbderrahmane.aftas.dtos.hunting.HuntingDTO;
 import com.AboussororAbderrahmane.aftas.dtos.hunting.RequestHuntingDTO;
+import com.AboussororAbderrahmane.aftas.entities.Hunting;
 import com.AboussororAbderrahmane.aftas.exceptions.InvalidDataException;
 import com.AboussororAbderrahmane.aftas.exceptions.NotFoundException;
 import com.AboussororAbderrahmane.aftas.repositories.CompetitionRepository;
@@ -35,22 +36,26 @@ public class HuntingService implements IHuntingService {
     }
 
     @Override
-    public HuntingDTO findById(Integer integer) throws NotFoundException {
-        return null;
+    public HuntingDTO findById(Integer id) throws NotFoundException {
+        log.info("Retrieving one hunting");
+        Hunting hunting = huntingRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Hunting not found"));
+        return modelMapper.map(hunting, HuntingDTO.class);
     }
 
     @Override
     public HuntingDTO save(RequestHuntingDTO bean) throws InvalidDataException {
+
         return null;
     }
 
     @Override
-    public HuntingDTO update(Integer integer, RequestHuntingDTO bean) throws NotFoundException, InvalidDataException {
+    public HuntingDTO update(Integer id, RequestHuntingDTO bean) throws NotFoundException, InvalidDataException {
         return null;
     }
 
     @Override
-    public boolean delete(Integer integer) throws NotFoundException {
+    public boolean delete(Integer id) throws NotFoundException {
         return false;
     }
 }
