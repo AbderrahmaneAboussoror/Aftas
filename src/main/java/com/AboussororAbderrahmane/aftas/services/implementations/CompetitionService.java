@@ -50,7 +50,13 @@ public class CompetitionService implements ICompetitionService {
 
     @Override
     public CompetitionDTO save(RequestCompetitionDTO bean) throws InvalidDataException {
-        return null;
+        log.info("Checking if the competition date exists in the database");
+        if (competitionRepository.existsByDate(bean.getDate()))
+            throw new InvalidDataException("A competition with the same date already exists");
+
+        Competition competition = modelMapper.map(bean, Competition.class);
+        log.info("Saving new competition {}", competition.getCode());
+        return modelMapper.map(competitionRepository.save(competition), CompetitionDTO.class);
     }
 
     @Override
