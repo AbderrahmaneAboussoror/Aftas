@@ -77,6 +77,12 @@ public class RankingService implements IRankingService {
 
     @Override
     public boolean delete(RankingId rankingId) throws NotFoundException {
+        log.info("Checking if the rank exists");
+        Ranking ranking = rankingRepository.findById(rankingId)
+                .orElseThrow(() -> new NotFoundException("Rank not found"));
+
+        log.info("Deleting rank");
+        rankingRepository.delete(ranking);
         return true;
     }
 }

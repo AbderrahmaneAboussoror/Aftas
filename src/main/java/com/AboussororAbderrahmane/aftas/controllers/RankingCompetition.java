@@ -72,4 +72,17 @@ public class RankingCompetition {
                         .build()
         );
     }
+    @DeleteMapping("/{memberNum}/{competitionCode}")
+    public ResponseEntity<Response> delete(@PathVariable int memberNum, @PathVariable String competitionCode) throws NotFoundException {
+        RankingId rankingId = new RankingId(memberNum, competitionCode);
+        return ResponseEntity.ok(
+                Response.builder()
+                        .timeStamp(now())
+                        .data(of("deleted", rankingService.delete(rankingId)))
+                        .message("Ranking deleted")
+                        .status(OK)
+                        .statusCode(OK.value())
+                        .build()
+        );
+    }
 }
