@@ -61,7 +61,18 @@ public class CompetitionService implements ICompetitionService {
 
     @Override
     public CompetitionDTO update(String s, RequestCompetitionDTO bean) throws NotFoundException, InvalidDataException {
-        return null;
+        log.info("Checking if the competition exists");
+        Competition competition = competitionRepository.findCompetitionByCode(s)
+                .orElseThrow(() -> new NotFoundException("Competition not found"));
+
+        competition.setAmount(bean.getAmount());
+        competition.setLocation(bean.getLocation());
+        competition.setStartTime(bean.getStartTime());
+        competition.setEndTime(bean.getEndTime());
+        competition.setNumberOfParticipants(bean.getNumberOfParticipants());
+
+        log.info("Updating competition {}", competition.getCode());
+        return modelMapper.map(competitionRepository.save(competition), CompetitionDTO.class);
     }
 
     @Override
