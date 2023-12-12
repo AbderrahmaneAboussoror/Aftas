@@ -4,6 +4,7 @@ import com.AboussororAbderrahmane.aftas.dtos.Response;
 import com.AboussororAbderrahmane.aftas.exceptions.NotFoundException;
 import com.AboussororAbderrahmane.aftas.services.implementations.CompetitionService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,6 +25,18 @@ public class CompetitionController {
                 Response.builder()
                         .timeStamp(now())
                         .data(of("competitions", competitionService.findAll()))
+                        .message("Competitions retrieved")
+                        .status(OK)
+                        .statusCode(OK.value())
+                        .build()
+        );
+    }
+    @GetMapping("/pagination")
+    public ResponseEntity<Response> pagination(Pageable pageable) {
+        return ResponseEntity.ok(
+                Response.builder()
+                        .timeStamp(now())
+                        .data(of("competitions", competitionService.pagination(pageable)))
                         .message("Competitions retrieved")
                         .status(OK)
                         .statusCode(OK.value())

@@ -11,6 +11,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,6 +29,15 @@ public class CompetitionService implements ICompetitionService {
     public List<CompetitionDTO> findAll() {
         log.info("Retrieving all competitions");
         return List.of(modelMapper.map(competitionRepository.findAll(), CompetitionDTO[].class));
+    }
+
+    @Override
+    public Page<CompetitionDTO> pagination(Pageable pageable) {
+        log.info("Retrieving all competitions with pagination");
+        Page<Competition> competitions = competitionRepository.findAll(pageable);
+        return competitions.map(
+                competition -> modelMapper.map(competition, CompetitionDTO.class)
+        );
     }
 
     @Override
