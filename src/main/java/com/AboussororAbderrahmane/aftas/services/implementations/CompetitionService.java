@@ -77,6 +77,12 @@ public class CompetitionService implements ICompetitionService {
 
     @Override
     public boolean delete(String s) throws NotFoundException {
-        return false;
+        log.info("Checking if the competition exists");
+        Competition competition = competitionRepository.findCompetitionByCode(s)
+                .orElseThrow(() -> new NotFoundException("Competition not found"));
+
+        log.info("Deleting competition");
+        competitionRepository.delete(competition);
+        return true;
     }
 }

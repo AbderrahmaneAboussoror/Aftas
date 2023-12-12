@@ -83,4 +83,16 @@ public class CompetitionController {
                         .build()
         );
     }
+    @DeleteMapping("/{code}")
+    public ResponseEntity<Response> delete(@PathVariable String code) throws NotFoundException {
+        return ResponseEntity.ok(
+                Response.builder()
+                        .timeStamp(now())
+                        .data(of("deleted", competitionService.delete(code)))
+                        .message("Competition deleted")
+                        .status(OK)
+                        .statusCode(OK.value())
+                        .build()
+        );
+    }
 }
