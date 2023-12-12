@@ -2,6 +2,7 @@ package com.AboussororAbderrahmane.aftas.services.implementations;
 
 import com.AboussororAbderrahmane.aftas.dtos.competition.CompetitionDTO;
 import com.AboussororAbderrahmane.aftas.dtos.competition.RequestCompetitionDTO;
+import com.AboussororAbderrahmane.aftas.entities.Competition;
 import com.AboussororAbderrahmane.aftas.exceptions.InvalidDataException;
 import com.AboussororAbderrahmane.aftas.exceptions.NotFoundException;
 import com.AboussororAbderrahmane.aftas.repositories.CompetitionRepository;
@@ -30,7 +31,10 @@ public class CompetitionService implements ICompetitionService {
 
     @Override
     public CompetitionDTO findById(String s) throws NotFoundException {
-        return null;
+        log.info("Retrieving one competition");
+        Competition competition = competitionRepository.findCompetitionByCode(s)
+                .orElseThrow(() -> new NotFoundException("Competition not found"));
+        return modelMapper.map(competition, CompetitionDTO.class);
     }
 
     @Override

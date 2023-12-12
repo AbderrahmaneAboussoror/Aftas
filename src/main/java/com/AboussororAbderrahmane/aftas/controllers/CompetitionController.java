@@ -1,13 +1,11 @@
 package com.AboussororAbderrahmane.aftas.controllers;
 
 import com.AboussororAbderrahmane.aftas.dtos.Response;
+import com.AboussororAbderrahmane.aftas.exceptions.NotFoundException;
 import com.AboussororAbderrahmane.aftas.services.implementations.CompetitionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import static java.time.LocalDateTime.now;
 import static java.util.Map.of;
@@ -27,6 +25,18 @@ public class CompetitionController {
                         .timeStamp(now())
                         .data(of("competitions", competitionService.findAll()))
                         .message("Competitions retrieved")
+                        .status(OK)
+                        .statusCode(OK.value())
+                        .build()
+        );
+    }
+    @GetMapping("/{code}")
+    public ResponseEntity<Response> get(@PathVariable String code) throws NotFoundException {
+        return ResponseEntity.ok(
+                Response.builder()
+                        .timeStamp(now())
+                        .data(of("competition", competitionService.findById(code)))
+                        .message("Competition retrieved")
                         .status(OK)
                         .statusCode(OK.value())
                         .build()
