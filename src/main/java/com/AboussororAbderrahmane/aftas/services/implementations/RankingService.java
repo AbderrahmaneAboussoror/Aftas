@@ -2,6 +2,7 @@ package com.AboussororAbderrahmane.aftas.services.implementations;
 
 import com.AboussororAbderrahmane.aftas.dtos.ranking.RankingDTO;
 import com.AboussororAbderrahmane.aftas.dtos.ranking.RequestRankingDTO;
+import com.AboussororAbderrahmane.aftas.entities.Ranking;
 import com.AboussororAbderrahmane.aftas.entities.RankingId;
 import com.AboussororAbderrahmane.aftas.exceptions.InvalidDataException;
 import com.AboussororAbderrahmane.aftas.exceptions.NotFoundException;
@@ -31,7 +32,10 @@ public class RankingService implements IRankingService {
 
     @Override
     public RankingDTO findById(RankingId rankingId) throws NotFoundException {
-        return null;
+        log.info("Retrieving one rank");
+        Ranking ranking = rankingRepository.findById(rankingId)
+                .orElseThrow(() -> new NotFoundException("Rank not found"));
+        return modelMapper.map(ranking, RankingDTO.class);
     }
 
     @Override
