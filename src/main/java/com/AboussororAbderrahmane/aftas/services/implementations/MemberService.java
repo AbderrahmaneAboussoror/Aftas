@@ -81,6 +81,12 @@ public class MemberService implements IMemberService {
 
     @Override
     public boolean delete(Integer integer) throws NotFoundException {
-        return false;
+        log.info("Checking if the member exists");
+        Member member = memberRepository.findMemberByNum(integer)
+                .orElseThrow(() -> new NotFoundException("Member not found"));
+
+        log.info("Deleting member {}", member.getName());
+        memberRepository.delete(member);
+        return true;
     }
 }

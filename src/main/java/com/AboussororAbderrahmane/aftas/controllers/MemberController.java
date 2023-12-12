@@ -82,4 +82,16 @@ public class MemberController {
                         .build()
         );
     }
+    @DeleteMapping("/{num}")
+    public ResponseEntity<Response> delete(@PathVariable int num) throws NotFoundException {
+        return ResponseEntity.ok(
+                Response.builder()
+                        .timeStamp(now())
+                        .data(of("deleted", memberService.delete(num)))
+                        .message("Member deleted")
+                        .status(OK)
+                        .statusCode(OK.value())
+                        .build()
+        );
+    }
 }
