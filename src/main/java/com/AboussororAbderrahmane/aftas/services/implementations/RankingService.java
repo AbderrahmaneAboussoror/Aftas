@@ -18,7 +18,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -60,6 +63,14 @@ public class RankingService implements IRankingService {
         Member member = memberRepository.findMemberByNum(bean.getMemberNum())
                 .orElseThrow(() -> new InvalidDataException("Member id inserted doesn't exist"));
 
+        log.info("Checking the number of participants");
+        if (!checkCompetitionPlaces(competition))
+            throw new InvalidDataException("Number of participants has reached the maximum!");
+
+        log.info("Checking the hours left before inserting a participant");
+        if(!checkCompetitionDate(competition))
+            throw new InvalidDataException("Unable to insert new participants in the last 24h before the competition starts");
+
         RankingId rankingId = new RankingId(bean.getMemberNum(), bean.getCompetitionCode());
         Ranking ranking = new Ranking();
         ranking.setId(rankingId);
@@ -84,5 +95,14 @@ public class RankingService implements IRankingService {
         log.info("Deleting rank");
         rankingRepository.delete(ranking);
         return true;
+    }
+
+    //Constraint methods
+    private boolean checkCompetitionPlaces(Competition competition){
+        int totalNumberOfParticipants = rankingRepository.countById_CompetitionCode(competition.getCode());
+        return totalNumberOfParticipants > competition.getNumberOfParticipants();
+    }
+    private boolean checkCompetitionDate(Competition competition) {
+        return LocalDate.now().until(competition.getDate(), ChronoUnit.HOURS) > 24;
     }
 }
