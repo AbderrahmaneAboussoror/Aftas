@@ -11,6 +11,4 @@ import lombok.NoArgsConstructor;
 public class RequestRankingDTO {
     private int memberNum;
     private String competitionCode;
-    private int rank;
-    private int score;
 }

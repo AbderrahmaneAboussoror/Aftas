@@ -21,7 +21,7 @@ import static org.springframework.http.HttpStatus.OK;
 @RequestMapping("/api/competition")
 @CrossOrigin
 public class CompetitionController {
-    private CompetitionService competitionService;
+    private final CompetitionService competitionService;
 
     @GetMapping
     public ResponseEntity<Response> getAll() {
